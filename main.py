@@ -14,7 +14,7 @@ import time
 import flask
 from flask import Flask, jsonify, request, url_for
 
-from db import add_user, check_user, wait_for_admin, auth_admin, auth_root, query_things, add_thing
+from db import add_user, check_user, wait_for_admin, auth_admin, auth_root, query_things, add_thing, year_pth, load_thing
 from model import inference
 
 app = Flask(__name__, static_folder='static', static_url_path="/static")
@@ -24,10 +24,10 @@ app = Flask(__name__, static_folder='static', static_url_path="/static")
 def index():
     return "hello world"
 
-@app.route('/about/')
-def about():
-    request_data = request.args.to_dict()
-    return "this is %s" % request_data['user'].upper()
+# @app.route('/about/')
+# def about():
+#     request_data = request.args.to_dict()
+#     return "this is %s" % request_data['user'].upper()
 
 # @app.route('/recent', methods=['GET'])
 # def recent():
@@ -54,22 +54,34 @@ def about():
 #     # print(dic)
 #     return jsonify(dic)
 
-# @app.route('/gallery', methods=['GET'])
-# def gallery():
-#     year = request.args.get('year')
-#     dic = {}
-#     res = query_things(year)
-#     for i, (_, title, year, content, _, _, image) in enumerate(res):
-#         if i >= 10:
-#             break
-#         dic[i] = {
-#             'title': title,
-#             'tags': [year, ],
-#             'content': content,
-#             'image': url_for('static', filename= 'data/' + image, _external=True)
-#         }
-#     # print(dic)
-#     return jsonify(dic)
+@app.route('/year', methods=['GET'])
+def year():
+    # year = request.args.get('year')
+    li = [i for i in year_pth.keys()]
+    # print(dic)
+    return jsonify({'year' : li})
+
+@app.route('/gallery')
+def gallery():
+    year = request.args.get('year')
+    begin = int(request.args.get('begin'))
+    num = int(request.args.get('num'))
+    # 读取num个
+    dic = load_thing(year, begin, num)
+    if dic['status'] == 200:
+        # 处理data
+        for idx, item in enumerate(dic['data']):
+            dic['data'][idx] = {
+                'image': url_for('static', filename= item[0], _external=True, _scheme='https'),
+                'year': item[1],
+                'type': item[2],
+                'name': item[3],
+                'birth': item[4],
+                'place': item[5],
+                'book': item[6]
+            }
+    
+    return jsonify(dic)
 
 @app.route('/uploader', methods=['POST'])
 def uploader():

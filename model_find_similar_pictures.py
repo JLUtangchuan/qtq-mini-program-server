@@ -30,7 +30,7 @@ def find_similar_pictures(predicted,pre_age,pre_shape):#前面是维度值，中
     ware_birth=np.load("static/bronze_ware_data/npy/dim_birth.npy")#出土地
     ware_name=np.load("static/bronze_ware_data/npy/dim_name.npy")#器名
     ware_where=np.load("static/bronze_ware_data/npy/dim_where.npy")#出土地
-    ware_chuchu = np.load("bronze_ware_data/npy/dim_chuchu.npy")  # 出处
+    ware_chuchu = np.load("static/bronze_ware_data/npy/dim_chuchu.npy")  # 出处
     
     for key, values in age_idx.items():  # 同时便利键值对
         if key == pre_age:
