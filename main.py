@@ -18,7 +18,7 @@ from db import add_user, check_user, wait_for_admin, auth_admin, auth_root, quer
 from model import inference
 
 app = Flask(__name__, static_folder='static', static_url_path="/static")
-
+app.config['JSONIFY_MIMETYPE'] = "application/json;charset=utf-8"
 
 @app.route('/')
 def index():
@@ -76,11 +76,10 @@ def gallery():
                 'year': item[1],
                 'type': item[2],
                 'name': item[3],
-                'birth': item[4],
-                'place': item[5],
+                'place': item[4],
+                'birth': item[5],
                 'book': item[6]
             }
-    
     return jsonify(dic)
 
 @app.route('/uploader', methods=['POST'])
@@ -106,7 +105,7 @@ def uploader():
         res['msg'] = '检测到物体'
         res['pred_score'] = [int(i*100) for i in res['pred_score']]
 
-        print(res)
+        # print(res)
         return jsonify(res)
         
 # @app.route('/checkAdmin', methods=['POST'])

@@ -20,17 +20,17 @@ db_path = "./database/qtq.sqlite"
 
 
 year_pth = {
-    "春秋晚期": "static/bronze_ware_data/years/chunqiuwan.npy",
-    "春秋早期": "static/bronze_ware_data/years/chunqiuzao.npy",
-    "春秋中期": "static/bronze_ware_data/years/chunqiuzhong.npy",
-    "商代晚期": "static/bronze_ware_data/years/shangdaiwan.npy",
     "商代早期": "static/bronze_ware_data/years/shangdaizao.npy",
-    "西周晚期": "static/bronze_ware_data/years/xizhouwan.npy",
+    "商代晚期": "static/bronze_ware_data/years/shangdaiwan.npy",
     "西周早期": "static/bronze_ware_data/years/xizhouzao.npy",
     "西周中期": "static/bronze_ware_data/years/xizhouzhong.npy",
-    "战国晚期": "static/bronze_ware_data/years/zhanguowan.npy",
+    "西周晚期": "static/bronze_ware_data/years/xizhouwan.npy",
+    "春秋早期": "static/bronze_ware_data/years/chunqiuzao.npy",
+    "春秋中期": "static/bronze_ware_data/years/chunqiuzhong.npy",
+    "春秋晚期": "static/bronze_ware_data/years/chunqiuwan.npy",
     "战国早期": "static/bronze_ware_data/years/zhanguozao.npy",
     "战国中期": "static/bronze_ware_data/years/zhanguozhong.npy",
+    "战国晚期": "static/bronze_ware_data/years/zhanguowan.npy",
 }
 
 
@@ -208,9 +208,9 @@ if __name__ == "__main__":
     # 读取npy
     years_pth = "static/bronze_ware_data/years/"
     dic = {}
-    for i in os.listdir(years_pth):
-        print(i)
-        data = np.load(os.path.join(years_pth, i))
-        dic[data[0][1]] = years_pth + i
-        print(data[0], len(data))
-    print(dic)
+    for i,v in year_pth.items():
+        data = np.load(v)
+        print(data[5][3], type(data[5][3]), len(data))
+        print(data[5].tolist(), len(data))
+        break
+    # print(dic)
