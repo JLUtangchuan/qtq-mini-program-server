@@ -13,6 +13,7 @@ import random
 import time
 from io import BytesIO
 
+import numpy as np
 from PIL import Image
 
 
@@ -50,6 +51,31 @@ def save_image(image, info="", path="static/data"):
     image_path = os.path.join(path, filename)
     image.save(image_path)
     return filename
+
+def load_db_data(year_pth):
+    """
+    加载数据
+    由于出处属性202302月有更新，需要对应一下
+    """
+    
+    # 建立 image_path: chuchu对应字典
+    image_path = np.load("static/bronze_ware_data/npy/dim_path.npy")  # 下面图片对应的文件路径
+    ware_chuchu = np.load("static/bronze_ware_data/npy/dim_chuchu.npy")  # 出处
+    newchuchu_dic = dict(zip(image_path, ware_chuchu))
+    
+    # 加载year_pth中的所有数据
+    dic = {}
+    for i,v in year_pth.items():
+        dic[i] = np.load(v)
+    
+    # 修改出处属性
+    for k, v in dic.items():
+        for i in range(v.shape[0]):
+            v[i][6] = newchuchu_dic[v[i][0]]
+            
+    # 返回字典
+    return dic
+    
 
 if __name__ == '__main__':
     # img_base64 = img_to_base64('./static/images/0.jpeg')

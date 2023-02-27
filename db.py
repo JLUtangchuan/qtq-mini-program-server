@@ -14,7 +14,7 @@ from PIL import Image
 import numpy as np
 
 
-from utils import base64_to_img, get_random_file, img_to_base64, save_image
+from utils import base64_to_img, get_random_file, img_to_base64, save_image, load_db_data
 
 db_path = "./database/qtq.sqlite"
 
@@ -32,7 +32,7 @@ year_pth = {
     "战国中期": "static/bronze_ware_data/years/zhanguozhong.npy",
     "战国晚期": "static/bronze_ware_data/years/zhanguowan.npy",
 }
-
+database_dic = load_db_data(year_pth)
 
 def check_user(username):
     """
@@ -139,7 +139,8 @@ def query_things(year=None, sort_by_time=True):
 
 def load_thing(year, begin, num):
     # 读取year
-    data = np.load(year_pth[year])
+    # data = np.load(year_pth[year])
+    data = database_dic[year]
     if begin >= len(data):
         return {
             'status' : -1,
