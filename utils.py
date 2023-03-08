@@ -56,12 +56,19 @@ def load_db_data(year_pth):
     """
     加载数据
     由于出处属性202302月有更新，需要对应一下
+    出处、出土地、现藏地都需要更新
     """
     
     # 建立 image_path: chuchu对应字典
     image_path = np.load("static/bronze_ware_data/npy/dim_path.npy")  # 下面图片对应的文件路径
-    ware_chuchu = np.load("static/bronze_ware_data/npy/dim_chuchu.npy")  # 出处
-    newchuchu_dic = dict(zip(image_path, ware_chuchu))
+    change_dict = {
+        "chuchu": np.load("static/bronze_ware_data/npy/dim_chuchu.npy"),  # 出处
+        "chutudi": np.load("static/bronze_ware_data/npy/dim_birth.npy"),  # 出土地
+        "xiancangdi": np.load("static/bronze_ware_data/npy/dim_where.npy"),  # 现藏地
+    }
+    # ware_chuchu = np.load("static/bronze_ware_data/npy/dim_chuchu.npy")  # 出处
+    # newchuchu_dic = dict(zip(image_path, ware_chuchu))
+    new_dic = dict(zip(image_path, zip(change_dict["chuchu"], change_dict["chutudi"], change_dict["xiancangdi"])))
     
     # 加载year_pth中的所有数据
     dic = {}
@@ -71,7 +78,9 @@ def load_db_data(year_pth):
     # 修改出处属性
     for k, v in dic.items():
         for i in range(v.shape[0]):
-            v[i][6] = newchuchu_dic[v[i][0]]
+            v[i][6] = new_dic[v[i][0]][0] # 出处
+            v[i][5] = new_dic[v[i][0]][1] # 出土地
+            v[i][4] = new_dic[v[i][0]][2] # 现藏地
             
     # 返回字典
     return dic
