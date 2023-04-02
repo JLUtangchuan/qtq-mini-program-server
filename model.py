@@ -210,15 +210,23 @@ def test(image_path,model,model_shape):
             "status": 200
             }
 
-def inference(image_path):
-    net_age = convnext_base(in_22k=True)
-    trained_weight = torch.load("3_batch/final_net.pth",map_location='cpu')
-    net_age.load_state_dict(trained_weight.state_dict())
+net_age = None
+net_shape = None
 
-    net_shape = convnext_base_shape(in_22k=True)
-    trained_weight = torch.load("shape_classification/pth/final_shape.pth", map_location='cpu')
-    net_shape.load_state_dict(trained_weight.state_dict())
-    return test(image_path,net_age, net_shape)
+def inference(image_path):
+    # 声明全局变量
+    global net_age
+    global net_shape
+    if net_age is None:
+        net_age = convnext_base(in_22k=True)
+        trained_weight = torch.load("3_batch/final_net.pth",map_location='cpu')
+        net_age.load_state_dict(trained_weight.state_dict())
+    
+    if net_shape is None:
+        net_shape = convnext_base_shape(in_22k=True)
+        trained_weight = torch.load("shape_classification/pth/final_shape.pth", map_location='cpu')
+        net_shape.load_state_dict(trained_weight.state_dict())
+    return test(image_path, net_age, net_shape)
 
 if __name__ == '__main__':
     # for test
