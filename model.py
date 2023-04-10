@@ -123,6 +123,8 @@ def test(image_path,model,model_shape):
             if values == predicted:
                 break
         list_age.append(key)
+        
+    "预测图片的器型"
     output = model_shape(batch_t)
     _, predicted = torch.max(output.data, 1)
     temp = int(_)
